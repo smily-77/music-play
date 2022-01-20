@@ -1,7 +1,7 @@
 module.exports = {
-    outputdir: 'dist',  //build输出目录
-    assetsdir: 'assets', //静态资源目录（js, css, img）
-    lintonsave: false, //是否开启eslint
+    // outputdir: 'dist',  //build输出目录
+    // assetsdir: 'assets', //静态资源目录（js, css, img）
+    // lintonsave: false, //是否开启eslint
     devServer: {
         proxy: {
             '/api': {
