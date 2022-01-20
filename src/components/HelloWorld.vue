@@ -1,21 +1,18 @@
 <template>
   <div class="hello">
     你好，小宝贝， hello,大宝贝
-   <Button type="primary">主要按s钮</Button>
+   <van-button type="primary">主要按s钮</van-button>
   </div>
 </template>
 
 <script>
-import { Button } from 'vant';
+
 
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
-  components: {
-    Button
-  }
 }
 </script>
 
