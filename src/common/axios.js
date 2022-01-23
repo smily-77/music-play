@@ -1,5 +1,4 @@
 import axios from "axios";
-import tool from "./tool"
 
 
 // 初始化一个axios对象, 超时时间60s
@@ -7,11 +6,19 @@ const _axios = axios.create({
     timeout: 60000,
 });
 
+// 根据环境，配置BaseUrl
+if (process.env.NODE_ENV === 'development')
+    _axios.defaults.baseURL = '/api';
+else if (process.env.NODE_ENV === 'production')
+    _axios.defaults.baseURL = 'https://netease-cloud-music-api-syz247179876.vercel.app/';
+
+
+// 请求拦截器
 _axios.interceptors.request.use(
-    (config) => {
+    config => {
         if (config.method === "post" || config.method === "post") {
             // 针对post和put请求做前处理
-            if (process.env.VUE_APP_FLAG === "production") {
+            if (process.env.NODE_ENV === "production") {
                 config.url = `${config.url}&realIP=76.76.21.142`
             }
             console.log("axios接口的post和put的参数", config.data);
@@ -23,14 +30,21 @@ _axios.interceptors.request.use(
             // 如果有需要展示加载状态, 则显示加载状态
         }
         return config;
+    },
+    error => {
+        return Promise.error(error);
     }
 );
 
-
-let authTimer;
-
+// 相应预处理
 _axios.interceptors.response.use(
-    (response) => {
-        //
+    response => {
+        if (response.status === 200) {            
+            return Promise.resolve(response);        
+        } else {            
+            return Promise.reject(response);        
+        }    
     }
 )
+
+export default _axios;

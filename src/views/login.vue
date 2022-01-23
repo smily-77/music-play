@@ -40,6 +40,7 @@
     
 </template>
 <script>
+import { IsRegister } from '@/common/api'
 export default {
   data() {
     return {
@@ -60,16 +61,16 @@ export default {
         {
           required: true,
         },
-        {
-          // 自定义校验规则
-          validator: (value) => {
-            return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
-              value
-            );
-          },
-          message: "请输入正确格式的手机号码",
-          trigger: "onBlur",
-        },
+        // {
+        //   // 自定义校验规则
+        //   validator: (value) => {
+        //     return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
+        //       value
+        //     );
+        //   },
+        //   message: "请输入正确格式的手机号码",
+        //   trigger: "onBlur",
+        // },
       ],
       codeRules: [
         {
@@ -81,7 +82,7 @@ export default {
     };
   },
   methods: {
-    getCode() {
+    async getCode() {
       const TIME_COUNT = 60;
       if (!this.timer) {
         this.count = TIME_COUNT;
@@ -98,16 +99,21 @@ export default {
         }, 1000);
       }
     },
-    submit() {
+    async submit() {
       // 全局表单验证
-      this.$refs.form
-        .validate()
-        .then(() => {
-          this.$toast.success("提交成功");
-        })
-        .catch(() => {
-          this.$toast.fail("提交失败");
-        });
+      console.log('222;')
+       IsRegister({ phone: '13787833290'})
+          .then(res=>{
+            console.log(res)
+          })
+      // this.$refs.form
+      //   .validate()
+      //   .then(() => {
+      //     this.$toast.success("提交成功");
+      //   })
+      //   .catch(() => {
+      //     this.$toast.fail("提交失败");
+      //   });
     },
     clearAll(){
       console.log(1111)
