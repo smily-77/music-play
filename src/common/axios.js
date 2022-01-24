@@ -19,7 +19,7 @@ _axios.interceptors.request.use(
         if (config.method === "post" || config.method === "post") {
             // 针对post和put请求做前处理
             if (process.env.NODE_ENV === "production") {
-                config.url = `${config.url}&realIP=76.76.21.142`
+                config.url = `${config.url}&realIP=76.223.126.116`
             }
             console.log("axios接口的post和put的参数", config.data);
         }

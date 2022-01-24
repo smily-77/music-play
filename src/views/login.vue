@@ -2,7 +2,6 @@
   <div class="container">
     <img src="@/assets/images/logo.png" alt="" />
     <div class="blackBox"></div>
-
     <div class="loginBox">
       <van-form ref="form" class="www">
         <!-- 手机号码 -->

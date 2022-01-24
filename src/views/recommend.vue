@@ -13,29 +13,50 @@
                 :right-icon="state.closePassword"
                 @click-right-icon="closePassword"
             ></van-field>
+            <Input 
+                initialData="初始值" 
+                clear="closePassword" 
+                update="updatePassword" 
+                placeholder="请输入手机号码"
+                blur="blurPassword"
+            ></Input>
+            {{ state.password }}
         </van-form>
     </div>
 </template>
 <script>
 import { reactive, watch } from 'vue'
+import Input from '@/components/Input'
 
 export default {
     name: 'Recommend',
+    components: {
+        Input
+    },
     setup() {
         const state = reactive({
             username: '',
             password: '',
             closeUsername: '',
-            closePassword: ''
+            closePassword: '',
+            text: ''
         });
         const closeUsername = (e) => {
             console.log(e)
             state.username = '';
         };
-        const closePassword = (e) => {
-            console.log(e)
-            state.password = '';
+        const closePassword = (value) => {
+            state.password = value;
         };
+        const updatePassword = (value) => {
+            state.password = value
+        }
+
+        const blurPassword = () => {
+            console.log('3233')
+        }
+        
+        
         watch(() => [state.username, state.password], () => {
             if (state.username != '')
                 state.closeUsername = 'close';
@@ -47,7 +68,7 @@ export default {
             else
                 state.closePassword = '';
         });
-        return { state, closeUsername, closePassword };
+        return { state, closeUsername, closePassword, updatePassword, blurPassword };
     },
     
 }
