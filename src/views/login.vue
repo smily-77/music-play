@@ -1,61 +1,60 @@
 <template>
-  <h1 class="title">云音乐</h1>
-  <div class="signBox">
-    <van-form ref="form">
-      <!-- 手机号码 -->
-      <van-field
-        v-model="mobile"
-        placeholder="请输入手机号码"
-        :rules="telRules"
-        :clearable="true"
-        @clear="clearAll"
-      ></van-field>
-      <!-- 验证码 -->
-      <van-field v-model="code" placeholder="请输入验证码" :clearable="true" :rules="codeRules">
-        <!-- 通过 button 插槽可以在输入框尾部插入按钮 -->
-        <template #button v-if="showButton">
-          <van-button
-            class="button"
-            @click="getCode"
-            :disabled="!countdown"
-            v-bind:class="[countdown ? 'reg_active' : 'reg_disActive']"
-          >
-            <span v-if="countdown">{{ text }}</span>
-            <span v-if="!countdown">{{ count }}</span>
-          </van-button>
-        </template>   
-      </van-field>
-      <van-button
-        color="rgb(255,36,66)"
-        type="primary"
-        block
-        @click="submit"
-        :disabled="submitButton"
-        >登录</van-button
-      >
-    </van-form>
-    <p class="signTitLe">未注册的手机号登录成功后将自动注册</p>
+  <div class="container">
+    <img src="@/assets/images/logo.png" alt="" />
+    <div class="blackBox"></div>
 
+    <div class="loginBox">
+      <van-form ref="form" class="www">
+        <!-- 手机号码 -->
+        <van-field
+          v-model="mobile"
+          placeholder="请输入手机号码"
+          :rules="telRules"
+          :right-icon="closePhone"
+          @click-right-icon="closePhoneBtn"
+        >
+        </van-field>
+        <!-- 密码 -->
+        <van-field
+          v-model="password"
+          placeholder="请输入密码"
+          :right-icon="closePassword"
+          @click-right-icon="closePasswordBtn"
+        >
+        </van-field>
+        <van-button
+          color="rgb(52,116,156)"
+          type="primary"
+          block
+          @click="submit"
+          :disabled="submitButton"
+          class="loginBtn"
+          size="small"
+          >登录</van-button
+        >
+      </van-form>
+      <router-link to="/sign">
+        <p class="loginTitLe">没有账号去注册</p>
+      </router-link>
+    </div>
   </div>
-    
 </template>
 <script>
-import { IsRegister } from '@/common/api'
+import { IsRegister } from "@/common/api";
 export default {
+  name: "Login",
   data() {
     return {
-      mobile: "",
       // 手机号码
-      code: "",
+      mobile: "",
       // 验证码
-      count: "",
-      countdown: true,
-      timer: null,
-      text: "发送验证码",
-      // 验证码按钮是否显示
-      showButton: false,
+      password: "",
       // 登录按钮是否有效
       submitButton: true,
+      showButton:false,
+      closePhone: "",
+      closePassword: "",
+     
       // 校验手机号码
       telRules: [
         {
@@ -72,40 +71,20 @@ export default {
         //   trigger: "onBlur",
         // },
       ],
-      codeRules: [
+      passwordRules: [
         {
           required: true,
-          // message: "验证码不能为空",
-          // trigger: "onBlur",
         },
       ],
     };
   },
   methods: {
-    async getCode() {
-      const TIME_COUNT = 60;
-      if (!this.timer) {
-        this.count = TIME_COUNT;
-        this.countdown = false;
-        this.text = "重新发送";
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--;
-          } else {
-            this.countdown = true;
-            clearInterval(this.timer);
-            this.timer = null;
-          }
-        }, 1000);
-      }
-    },
     async submit() {
       // 全局表单验证
-      console.log('222;')
-       IsRegister({ phone: '13787833290'})
-          .then(res=>{
-            console.log(res)
-          })
+      console.log("222;");
+      IsRegister({ phone: "13787833290" }).then((res) => {
+        console.log(res);
+      });
       // this.$refs.form
       //   .validate()
       //   .then(() => {
@@ -115,11 +94,12 @@ export default {
       //     this.$toast.fail("提交失败");
       //   });
     },
-    clearAll(){
-      console.log(1111)
-      this.mobile="";
-      this.code=""
-    }
+    closePhoneBtn() {
+      this.mobile = "";
+    },
+    closePasswordBtn() {
+      this.password = "";
+    },
   },
   watch: {
     mobile(value) {
@@ -127,17 +107,24 @@ export default {
         /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
           value
         );
-      if (validate === true) {
+      if (validate) {
         this.showButton = true;
       } else {
         this.showButton = false;
+        this.submitButton = true;
       }
+
+      if (value != "") this.closePhone = "close";
+      else this.closePhone = "";
     },
-    code(value) {
-      if (value&&this.showButton) {
-        
+    password(value) {
+      if (value && this.showButton) {
         this.submitButton = false;
+      } else {
+        this.submitButton = true;
       }
+      if (value != "") this.closePassword = "close";
+      else this.closePassword = "";
     },
   },
 };
@@ -146,25 +133,31 @@ export default {
 <style lang="less" scoped>
 /deep/.van-button--default {
   border: 0;
-  color: blue;
-  border-radius:10px;
+  color: rgb(143, 185, 201);
+  border-radius: 10px;
+  font-size: 12px;
+  height: 10px;
+  line-height: 8px;
 }
-
-.title {
-  margin-top: 80px;
-  font-family: "隶书", "LiSu";
-  color: rgb(255, 36, 66);
-  font-size: 78px;
+/deep/.van-cell {
+  border-radius: 15px;
+  margin-top: 8px;
 }
-.signBox{
-  width: 60%;
-  position:relative;
-  left: 50%;
-  bottom:-100px;
-  transform: translateX(-50%);
-  .signTitLe{
-    font-size: 12px;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .blackBox {
+    height: 20%;
+  }
+  .loginBox {
+    .loginTitLe {
+      font-size: 12px;
+      margin-top: 60px;
+      color: rgb(52, 116, 156);
+    }
+    
   }
 }
-
 </style>

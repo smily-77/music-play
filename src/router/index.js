@@ -1,10 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-const Login = () => import('@/views/login'/* webpackChunkName: "search" */)
-const Recommend = () => import('@/views/recommend'/* webpackChunkName: "recommend" */)
-const Singer = () => import('@/views/singer'/* webpackChunkName: "singer" */)
-const TopList = () => import('@/views/top-list'/* webpackChunkName: "top-list" */)
-const Search = () => import('@/views/search'/* webpackChunkName: "search" */)
+const Login = () => import('@/views/login')
+const Sign = () => import('@/views/sign')
+const Recommend = () => import('@/views/recommend')
+const Singer = () => import('@/views/singer')
+const TopList = () => import('@/views/top-list')
+const Search = () => import('@/views/search')
+
 
 
 const routes = [
@@ -16,6 +18,11 @@ const routes = [
       path:'/login',
       component:Login
   },
+  {
+    path:'/sign',
+    component:Sign
+},
+
   {
     path: '/recommend',
     component: Recommend,
