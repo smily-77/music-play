@@ -3,6 +3,7 @@
   <div class="signBox">
     <van-form ref="form">
       <!-- 手机号码 -->
+      
       <van-field
         v-model="mobile"
         placeholder="请输入手机号码"
@@ -44,6 +45,7 @@ import { IsRegister } from '@/common/api'
 export default {
   data() {
     return {
+      
       mobile: "",
       // 手机号码
       code: "",
