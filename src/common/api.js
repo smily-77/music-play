@@ -10,6 +10,12 @@ import { get } from './tool'
 export const PhoneLogin = (params) => get(`/login/cellphone`, params);
 
 /**
+ * 手机号注册
+ * {phone: '', password: '', nickname: '', captcha: ''}
+ */
+export const PhoneRegister = (params) => get(`/register/cellphone`, params);
+
+/**
  * 检测手机号是否注册
  * {phone: ''}
  */

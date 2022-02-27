@@ -69,7 +69,7 @@
 </template>
 <script>
 import { ref, watch, reactive } from "vue";
-import { IsRegister } from "@/common/api";
+import { Notify } from "vant"
 export default {
   name: "Sign",
   setup() {
@@ -101,29 +101,46 @@ export default {
           required: true,
           message: "请输入手机号码",
         },
-        // {
-        //   // 自定义校验规则
-        //   validator: (value) => {
-        //     return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
-        //       value
-        //     );
-        //   },
-        //   message: "请输入正确格式的手机号码",
-        // },
+        {
+          // 校验手机号是否符合规则
+          validator: (value) => {
+            return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
+              value
+            );
+          },
+          message: "请输入正确格式的手机号码",
+        },
+        {
+          // 验证手机号是否已经注册过
+          validator: async (value) => {
+            let params = {
+              phone: value
+            }
+            const res = await global.api.IsRegister(params);
+            if (res.code === 200 && res.exist === 2)
+              // 手机号已注册过
+              return false
+            return true
+          },
+          message: "手机号已经被注册过"
+        }
       ],
       passwordRules: [
         {
           required: true,
+          message: "请输入密码"
         },
       ],
       nicknameRules: [
         {
           required: true,
+          message: "请输入昵称"
         },
       ],
       captchaRules: [
         {
           required: true,
+          message: "请输入验证码"
         },
       ],
     });
@@ -141,15 +158,20 @@ export default {
       captcha.value = "";
     }
 
-    function getCaptcha() {
-      IsRegister({ phone: phone.value }).then((res) => {
-        if(res.code===200){
-          if(res.exist===1){
-            window.history.go(-1)
-          }
-        }
-      });
+    /**
+     * 发送验证码, 开启定时
+     */
+    async function getCaptcha() {
       captcha.value = "";
+      // 发送验证码请求
+      let params = {
+        phone: phone.value
+      }
+      const res = await global.api.sendCode(params);
+      if (res.code === 200)
+        // 验证码已发送, 是否给用户提示？
+        console.log(res);
+
       const TIME_COUNT = 60;
       let timer = "";
       if (!timer) {
@@ -167,6 +189,27 @@ export default {
         }, 1000);
       }
     }
+
+    /**
+     * 账号注册
+     * 发送注册请求
+     */
+    async function submit() {
+      console.log(loginForm.value);
+      let registerParams = {
+          phone: phone.value,
+          password: password.value,
+          nickname: nickname.value,
+          captcha: captcha.value
+      }
+      const res = global.api.PhoneRegister(registerParams)
+      if (res.code != 200) {
+          Notify({ type: 'danger', message: res.message});
+      } else {
+        Notify({ type: 'success', message: '注册成功'})
+      }
+    }
+
     watch(
       () => [phone.value, password.value, nickname.value, captcha.value],
       () => {
@@ -219,7 +262,7 @@ export default {
       loginForm,
       loginRules,
       submitButton,
-
+      submit,
       closePhoneBtn,
       closePasswordBtn,
       closeNicknameBtn,
@@ -231,7 +274,7 @@ export default {
 </script>
 <style lang="less" scoped>
 /deep/.van-cell {
-  border-radius: 15px;
+  border-radius: 10px;
   margin-top: 8px;
 }
 /deep/.van-button--default {

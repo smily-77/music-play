@@ -1,6 +1,5 @@
 import * as api from './api'
-import tool from './tool'
-
+import * as tool from './tool'
 global.DATEFORMAT = 'YYYY-MM-DD HH:mm:ss'
 
 Object.defineProperties(global, {
