@@ -69,6 +69,7 @@
 </template>
 <script>
 import { ref, watch, reactive } from "vue";
+import { IsRegister } from "@/common/api";
 export default {
   name: "Sign",
   setup() {
@@ -141,6 +142,13 @@ export default {
     }
 
     function getCaptcha() {
+      IsRegister({ phone: phone.value }).then((res) => {
+        if(res.code===200){
+          if(res.exist===1){
+            window.history.go(-1)
+          }
+        }
+      });
       captcha.value = "";
       const TIME_COUNT = 60;
       let timer = "";
