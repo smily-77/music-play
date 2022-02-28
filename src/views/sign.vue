@@ -36,6 +36,7 @@
         <van-field
           v-model="captcha"
           placeholder="请输入验证码"
+          :disabled="phoneSign"
           :rules="loginRules.captchaRules"
           validate-trigger="onBlur"
           :right-icon="closeCaptcha"
@@ -69,7 +70,7 @@
 </template>
 <script>
 import { ref, watch, reactive } from "vue";
-import { Notify } from "vant"
+import { Notify } from "vant";
 export default {
   name: "Sign",
   setup() {
@@ -83,6 +84,8 @@ export default {
     const closePassword = ref("");
     const closeNickname = ref("");
     const closeCaptcha = ref("");
+    // 手机号是否注册
+    const phoneSign = ref(false);
     //控制验证码按钮文字的不同显示
     const countdown = ref(true);
     // 验证码按钮的显示和隐藏
@@ -90,7 +93,7 @@ export default {
     const text = ref("发送验证码");
     // 验证码倒计时
     const count = ref("");
-    // 注册按钮禁用F
+    // 注册按钮禁用
     const submitButton = ref(true);
 
     const loginForm = ref(null);
@@ -103,44 +106,51 @@ export default {
         },
         {
           // 校验手机号是否符合规则
-          validator: (value) => {
-            return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
+          validator: async (value) => {
+            // 先校验手机号规则
+            let res = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
               value
             );
-          },
-          message: "请输入正确格式的手机号码",
-        },
-        {
-          // 验证手机号是否已经注册过
-          validator: async (value) => {
-            let params = {
-              phone: value
+            if (!res) {
+               phoneSign.value = false;
+               showButton.value = false;
+               return "请输入正确格式的手机号码"
             }
-            const res = await global.api.IsRegister(params);
-            if (res.code === 200 && res.exist === 2)
-              // 手机号已注册过
-              return false
-            return true
+            else {
+              // 校验手机号是否注册过
+              let params = {
+                phone: value,
+              };
+              const res = await global.api.IsRegister(params);
+              if (res.code === 200 && res.exist > 0) {
+                // 手机号已注册过
+                phoneSign.value = true;
+                showButton.value = false;
+                return "手机号已经被注册过";
+              }
+              phoneSign.value = false;
+              showButton.value = true;
+              return true;
+            }
           },
-          message: "手机号已经被注册过"
-        }
+        },
       ],
       passwordRules: [
         {
           required: true,
-          message: "请输入密码"
+          message: "请输入密码",
         },
       ],
       nicknameRules: [
         {
           required: true,
-          message: "请输入昵称"
+          message: "请输入昵称",
         },
       ],
       captchaRules: [
         {
           required: true,
-          message: "请输入验证码"
+          message: "请输入验证码",
         },
       ],
     });
@@ -165,8 +175,8 @@ export default {
       captcha.value = "";
       // 发送验证码请求
       let params = {
-        phone: phone.value
-      }
+        phone: phone.value,
+      };
       const res = await global.api.sendCode(params);
       if (res.code === 200)
         // 验证码已发送, 是否给用户提示？
@@ -197,16 +207,16 @@ export default {
     async function submit() {
       console.log(loginForm.value);
       let registerParams = {
-          phone: phone.value,
-          password: password.value,
-          nickname: nickname.value,
-          captcha: captcha.value
-      }
-      const res = global.api.PhoneRegister(registerParams)
+        phone: phone.value,
+        password: password.value,
+        nickname: nickname.value,
+        captcha: captcha.value,
+      };
+      const res = global.api.PhoneRegister(registerParams);
       if (res.code != 200) {
-          Notify({ type: 'danger', message: res.message});
+        Notify({ type: "danger", message: res.message });
       } else {
-        Notify({ type: 'success', message: '注册成功'})
+        Notify({ type: "success", message: "注册成功" });
       }
     }
 
@@ -217,24 +227,18 @@ export default {
           countdown.value = true;
           if (captcha.value) {
             submitButton.value = false;
+          } else {
+            submitButton.value = true;
           }
         } else {
           countdown.value = false;
+          submitButton.value = true;
         }
 
         if (phone.value != "") {
-          showButton.value = false;
-          let validate =
-            /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
-              phone.value
-            );
-          if (validate) {
-            showButton.value = true;
-          }
           closePhone.value = "close";
         } else {
           closePhone.value = "";
-          showButton.value = false;
         }
         // 表单清空
         if (password.value != "") closePassword.value = "close";
@@ -268,6 +272,7 @@ export default {
       closeNicknameBtn,
       closeCaptchaBtn,
       getCaptcha,
+      phoneSign
     };
   },
 };
