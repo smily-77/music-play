@@ -18,15 +18,18 @@
         <van-field
           v-model="password"
           placeholder="请输入密码"
+          :type="passwordType"
+          :disabled="!phoneSign"
           :rules="loginRules.passwordRules"
           validate-trigger="onBlur"
-          :right-icon="closePassword"
-          @click-right-icon="closePasswordBtn"
+          :right-icon="changeType"
+          @click-right-icon="changeTypeBtn"
         >
         </van-field>
         <van-field
           v-model="nickname"
           placeholder="请输入昵称"
+          :disabled="!phoneSign"
           :rules="loginRules.nicknameRules"
           validate-trigger="onBlur"
           :right-icon="closeNickname"
@@ -36,7 +39,7 @@
         <van-field
           v-model="captcha"
           placeholder="请输入验证码"
-          :disabled="phoneSign"
+          :disabled="!phoneSign"
           :rules="loginRules.captchaRules"
           validate-trigger="onBlur"
           :right-icon="closeCaptcha"
@@ -65,6 +68,9 @@
           >注册</van-button
         >
       </van-form>
+      <router-link to="/login">
+        <p class="loginTitLe">已注册去登录</p>
+      </router-link>
     </div>
   </div>
 </template>
@@ -79,13 +85,17 @@ export default {
     const password = ref("");
     const nickname = ref("");
     const captcha = ref("");
+    // 密码的显示与隐藏
+    const passwordType = ref("password");
     // 表单清除按钮的控制
     const closePhone = ref("");
-    const closePassword = ref("");
     const closeNickname = ref("");
     const closeCaptcha = ref("");
+    // 密码框的显示和隐藏type
+    const changeType = ref("closed-eye");
+
     // 手机号是否注册
-    const phoneSign = ref(false);
+    const phoneSign = ref(true);
     //控制验证码按钮文字的不同显示
     const countdown = ref(true);
     // 验证码按钮的显示和隐藏
@@ -108,15 +118,15 @@ export default {
           // 校验手机号是否符合规则
           validator: async (value) => {
             // 先校验手机号规则
-            let res = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
-              value
-            );
+            let res =
+              /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(
+                value
+              );
             if (!res) {
-               phoneSign.value = false;
-               showButton.value = false;
-               return "请输入正确格式的手机号码"
-            }
-            else {
+              phoneSign.value = true;
+              showButton.value = false;
+              return "请输入正确格式的手机号码";
+            } else {
               // 校验手机号是否注册过
               let params = {
                 phone: value,
@@ -124,11 +134,14 @@ export default {
               const res = await global.api.IsRegister(params);
               if (res.code === 200 && res.exist > 0) {
                 // 手机号已注册过
-                phoneSign.value = true;
+                phoneSign.value = false;
                 showButton.value = false;
+                // 清空
+                nickname.value = "";
+                password.value = "";
                 return "手机号已经被注册过";
               }
-              phoneSign.value = false;
+              phoneSign.value = true;
               showButton.value = true;
               return true;
             }
@@ -157,15 +170,26 @@ export default {
 
     function closePhoneBtn() {
       phone.value = "";
+      changeType.value = "closed-eye";
+      passwordType.value = "password";
     }
-    function closePasswordBtn() {
-      password.value = "";
-    }
+    // function closePasswordBtn() {
+    //   password.value = "";
+    // }
     function closeNicknameBtn() {
       nickname.value = "";
     }
     function closeCaptchaBtn() {
       captcha.value = "";
+    }
+    function changeTypeBtn() {
+      if (changeType.value === "closed-eye") {
+        changeType.value = "eye-o";
+        passwordType.value = "text";
+      } else {
+        changeType.value = "closed-eye";
+        passwordType.value = "password";
+      }
     }
 
     /**
@@ -212,9 +236,10 @@ export default {
         nickname: nickname.value,
         captcha: captcha.value,
       };
-      const res = global.api.PhoneRegister(registerParams);
+      const res = await global.api.PhoneRegister(registerParams);
       if (res.code != 200) {
         Notify({ type: "danger", message: res.message });
+       
       } else {
         Notify({ type: "success", message: "注册成功" });
       }
@@ -239,10 +264,13 @@ export default {
           closePhone.value = "close";
         } else {
           closePhone.value = "";
+          password.value = "";
+          nickname.value = "";
+          this.$refs.loginForm.resetValidation();
         }
         // 表单清空
-        if (password.value != "") closePassword.value = "close";
-        else closePassword.value = "";
+        // if (password.value != "") closePassword.value = "close";
+        // else closePassword.value = "";
         if (nickname.value != "") closeNickname.value = "close";
         else closeNickname.value = "";
         if (captcha.value != "") closeCaptcha.value = "close";
@@ -256,7 +284,7 @@ export default {
       nickname,
       captcha,
       closePhone,
-      closePassword,
+      // closePassword,
       closeNickname,
       closeCaptcha,
       countdown,
@@ -268,11 +296,14 @@ export default {
       submitButton,
       submit,
       closePhoneBtn,
-      closePasswordBtn,
+      // closePasswordBtn,
       closeNicknameBtn,
       closeCaptchaBtn,
       getCaptcha,
-      phoneSign
+      phoneSign,
+      passwordType,
+      changeType,
+      changeTypeBtn,
     };
   },
 };
@@ -292,6 +323,14 @@ export default {
 .container {
   .blackBox {
     height: 5%;
+  }
+  .loginTitLe {
+    font-size: 12px;
+    margin-top: 60px;
+    color: rgb(52, 116, 156);
+  }
+  .button {
+    color: rgb(52, 116, 156);
   }
 }
 </style>
