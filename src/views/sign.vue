@@ -239,7 +239,6 @@ export default {
       const res = await global.api.PhoneRegister(registerParams);
       if (res.code != 200) {
         Notify({ type: "danger", message: res.message });
-       
       } else {
         Notify({ type: "success", message: "注册成功" });
       }
@@ -324,11 +323,19 @@ export default {
   .blackBox {
     height: 5%;
   }
-  .loginTitLe {
-    font-size: 12px;
-    margin-top: 60px;
-    color: rgb(52, 116, 156);
+  .loginBox {
+    position: relative;
+    .loginTitLe {
+      position: absolute;
+      left:50%;
+      margin-left:-45px;
+      width: 90px;
+      font-size: 12px;
+      margin-top: 60px;
+      color: rgb(52, 116, 156);
+    }
   }
+
   .button {
     color: rgb(52, 116, 156);
   }

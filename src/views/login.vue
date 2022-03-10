@@ -13,14 +13,6 @@
           @click-right-icon="closePhoneBtn"
         >
         </van-field>
-        <!-- 密码 -->
-        <!-- <van-field
-          v-model="password"
-          placeholder="请输入密码"
-          :right-icon="closePassword"
-          @click-right-icon="closePasswordBtn"
-        >
-        </van-field> -->
         <van-field
           v-model="captcha"
           placeholder="请输入验证码"
@@ -145,7 +137,7 @@ export default {
               // 1.2token只在当前网站打开期间生效，所以必须将token保存在sessionStorage中
               sessionStorage.setItem("token", res.token);
               // 2.通过编程式导航跳转页面 路由地址  /recommend
-              this.$router.push("/recommend");
+              this.$router.push("/welcome");
             }
           });
           p.catch((err) => {
@@ -240,7 +232,12 @@ export default {
     height: 20%;
   }
   .loginBox {
+    position: relative;
     .loginTitLe {
+      position: absolute;
+      left:50%;
+      margin-left:-45px;
+      width: 90px;
       font-size: 12px;
       margin-top: 60px;
       color: rgb(52, 116, 156);
