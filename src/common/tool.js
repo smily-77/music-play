@@ -1,4 +1,5 @@
 import axios from "./axios";
+import _axios from "axios";
 
 /** 
  * post方法，对应post请求 
@@ -34,4 +35,19 @@ import axios from "./axios";
     })    
 });}
 
+
+export function getAllSingers(urls) {
+    return new Promise((resolve, reject) =>{ 
+        let promiseObjs = [];
+        for (let i = 0 ;i < urls.length; i++) {
+            promiseObjs.push(axios.get(urls[i]));
+        }
+        _axios.all(promiseObjs)
+        .then(res=> {
+            resolve(res);
+        }).catch(err =>{
+            reject(err.data);
+        })
+    })
+}
 

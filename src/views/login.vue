@@ -137,7 +137,7 @@ export default {
               // 1.2token只在当前网站打开期间生效，所以必须将token保存在sessionStorage中
               sessionStorage.setItem("token", res.token);
               // 2.通过编程式导航跳转页面 路由地址  /recommend
-              this.$router.push("/welcome");
+              this.$router.push("/recommend");
             }
           });
           p.catch((err) => {

@@ -1,4 +1,4 @@
-import { get } from './tool'
+import { get, getAllSingers } from './tool'
 
 
 /**
@@ -32,6 +32,22 @@ export const sendCode = (params) => get('/captcha/sent', params);
  * {phone: '', captcha: ''}
  */
 export const verifyCode = (params) => get('/captcha/verify', params);
+
+// 获取轮播图
+export const getBanner = (params) => get('/banner', params);
+// 获取推荐歌单
+export const getPersonalized = (params) => get('/personalized', params);
+/**
+ * 
+ * 获取所有歌手数据 
+ * {type:0, area: 0, initial: ''}
+ */
+export const getSinger = (urls) => getAllSingers(urls);
+
+
+
+
+
 
 /**
  * 退出登录

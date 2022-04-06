@@ -1,6 +1,8 @@
 // 颜色定义规范
-$color-background:rgb(143, 185, 201);
+$color-background: rgb(143, 185, 201);
+$color-background-a: rgb(245,245,245);
 $color-background-d: rgba(0, 0, 0, 0.3);
+$color-background-t: rgb(248, 248, 248);
 $color-highlight-background: #333;
 $color-dialog-background: #666;
 $color-theme: #fff;
@@ -10,6 +12,8 @@ $color-text: #fff;
 $color-text-d: rgba(255, 255, 255, 0.3);
 $color-text-l: rgba(255, 255, 255, 0.5);
 $color-text-ll: rgba(255, 255, 255, 0.8);
+$color-text-2:rgb(136,136,136);
+$color-text-3:rgb(44,44,44);
 
 // 字体定义规范
 $font-size-small-s: 10px;
