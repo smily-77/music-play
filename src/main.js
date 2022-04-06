@@ -19,6 +19,9 @@ import "@/common/global";
 // 引入全局样式文件
 import "@/assets/scss/index.scss";
 
+// 引入singersStore
+import singerStore from "@/store/index.js";
+
 let Vue = createApp(App);
 
 // vant组件全局注册
@@ -39,5 +42,8 @@ Vue.use(Lazyload, {
 // Vue.use(Notify);
 
 Vue.use(router);
+
+// 挂载store
+Vue.use(singerStore);
 
 Vue.mount("#app");

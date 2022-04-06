@@ -137,7 +137,6 @@ export default {
     }
     .item {
       display: flex;
-      width: 98%;
       box-sizing: border-box;
       align-items: center;
       padding: 0 20px 12px 20px;
