@@ -1,7 +1,11 @@
 <template>
   <m-header></m-header>
   <tab></tab>
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <transition appear name="slide">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 </template>
 <script>
 import Header from "@/components/header/header";
@@ -15,6 +19,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

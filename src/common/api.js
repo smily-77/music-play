@@ -44,8 +44,26 @@ export const getPersonalized = (params) => get('/personalized', params);
  */
 export const getSinger = (urls) => getAllSingers(urls);
 
+/**
+ * 获取歌手歌曲
+ * @param {*} params 
+ * {id:000}
+ * @returns 
+ */
+export const getHotSongs = (params) => get('/artist/top/song', params);
 
-
+/**
+ * 获取歌手详情
+ * {id:000}
+ * @returns 
+ */
+ export const getSingerDetail = (params) => get('/artist/detail', params);
+ /**
+  * 根据id获取歌曲url
+  * {id:000}
+  * @returns 
+  */
+  export const getSongUrl = (params) => get('/song/url', params);
 
 
 
