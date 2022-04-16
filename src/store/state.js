@@ -1,13 +1,13 @@
-import { PLAY_MODE } from '@/assets/js/constant'
-// import { load } from '@/assets/js/array-store'
+import { PLAY_MODE, FAVORITE_KEY } from "@/assets/js/constant";
+import { load } from "@/assets/js/array-store";
 
 const state = {
   // 歌手列表
   singers: null,
   // 顺序播放列表
   sequenceList: [],
-  // 真正的播放列表
-  playlist: [],
+  // 随机播放列表
+  randomList: [],
   // 是否在播放
   playing: false,
   // 播放模式
@@ -16,9 +16,16 @@ const state = {
   currentIndex: 0,
   // 播放器的状态
   fullScreen: false,
-  favoriteList: [],
+  // 收藏歌单列表
+  favoriteList: load(FAVORITE_KEY),
   // searchHistory: load(SEARCH_KEY),
-  playHistory: []
-}
+  playHistory: [],
+  // 当前播放的歌曲
+  currentSong: {},
+  // 上一首播放歌曲的index
+  lastPreIndex: -1,
+  // 后一首播放歌曲的index
+  lastNextIndex: -1,
+};
 
-export default state
+export default state;

@@ -1,3 +1,4 @@
+import { shuffle } from '@/assets/js/util'
 const mutations = {
   // 修改歌手列表
   saveSingers(state, data) {
@@ -16,6 +17,10 @@ const mutations = {
   setPlaylist(state, list) {
     state.playlist = list;
   },
+  setList(state, list) {
+    state.randomList = list;
+  },
+
   // 设置播放模式
   setPlayMode(state, mode) {
     state.playMode = mode;
@@ -28,6 +33,7 @@ const mutations = {
   setFullScreen(state, fullScreen) {
     state.fullScreen = fullScreen;
   },
+  // 设置收藏
   setFavoriteList(state, list) {
     state.favoriteList = list;
   },
@@ -45,6 +51,50 @@ const mutations = {
   setPlayHistory(state, songs) {
     state.playHistory = songs;
   },
+
+  // 存放当前歌曲
+  setCurrentSong(state, song) {
+    state.currentSong = song;
+  },
+
+  // 追加url数据
+  addSongUrl(state, {index, url}) {
+    state.sequenceList[index].url = url;
+  },
+
+  // 追加歌曲歌词
+  addSongWords(state, {index, words, lyric}) {
+    state.sequenceList[index].words = words;
+    state.sequenceList[index].lyric = lyric;
+  },
+
+  addSongDuration(state, {index, duration}) {
+    state.sequenceList[index].duration = duration;
+  },
+
+  // 改变歌曲播放次序
+  changeMode(state, mode) {
+    state.playMode = mode;
+  },
+
+  //记录上一次前一首播放的歌曲index
+  setLastPreIndex(state, index) {
+    state.lastPreIndex = index;
+  },
+
+  //记录上一次后一首播放的歌曲index
+  setLastNextIndex(state, index) {
+    state.lastNextIndex = index;
+  },
+
+  // 初始化随机歌曲数组
+  setRandomList(state) {
+    console.log('old', state.sequenceList);
+    state.randomList = shuffle(state.sequenceList);
+    console.log('new', state.randomList);
+  },
+  
+
 };
 
 export default mutations;

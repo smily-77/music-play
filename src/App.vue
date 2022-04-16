@@ -1,14 +1,18 @@
-<template> 
+<template>
   <router-view v-slot="{ Component }">
-      <transition appear name="slide">
-        <component :is="Component"/>
-      </transition>
-    </router-view>
+    <transition appear name="slide">
+      <component :is="Component" />
+    </transition>
+  </router-view>
+  <player></player>
 </template>
 
 <script>
-
+import Player from "@/components/player/player";
 export default {
+  components: {
+    Player,
+  },
   name: "App",
 };
 </script>

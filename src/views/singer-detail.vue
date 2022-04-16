@@ -9,6 +9,7 @@ import { ref } from "vue";
 import router from "@/router/index.js";
 import MusicList from "@/components/music-list/music-list";
 import { provide } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "singer-detail",
   components: {
@@ -16,6 +17,7 @@ export default {
   },
   setup() {
     //   console.log(router.currentRoute.value.params.id,"id")
+    const store = useStore();
     const songs = ref();
     const pic = ref();
     const title = ref("");
@@ -51,6 +53,9 @@ export default {
       // 加载状态结束
       loading.value = false;
       finished.value = true;
+      store.dispatch("saveAllMusics", {
+        songs: songs,
+      });
     };
     getSongs();
     getDetail();

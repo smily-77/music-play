@@ -21,7 +21,8 @@ import "@/assets/scss/index.scss";
 
 // 引入singersStore
 import singerStore from "@/store/index.js";
-
+// 引入自定义指令loding
+import loadingDirective from '@/components/base/loading/directive'
 let Vue = createApp(App);
 
 // vant组件全局注册
@@ -45,5 +46,7 @@ Vue.use(router);
 
 // 挂载store
 Vue.use(singerStore);
+
+Vue.directive('loading', loadingDirective);
 
 Vue.mount("#app");

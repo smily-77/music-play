@@ -1,19 +1,29 @@
 import { PLAY_MODE } from '@/assets/js/constant'
 import { shuffle } from '@/assets/js/util'
 
+
+// 向song数据中添加url
+export function addSongAttr({ commit }, { index, url, words, duration, lyric }) {
+  commit('addSongUrl', {index, url})
+  commit('addSongWords', {index, words, lyric})
+  commit('addSongDuration', {index, duration})
+}
+
+// 存储歌单所有音乐列表
+export function saveAllMusics({ commit }, { songs }) {
+  commit('setSequenceList', songs);
+}
+
 // 选择列表中的播放
-export function selectPlay({ commit }, {list, index} ) {
-  console.log('actions', list, index);
-  // 播放模式
-  commit('setPlayMode', PLAY_MODE.sequence)
-  // 播放列表
-  commit('setSequenceList', list)
+export function selectPlay({ commit }, { song, index } ) {
+  console.log('actions', commit, song, index);
   // 播放歌曲
-  commit('setPlayingState', true)
+  commit('setPlayingState', true);
   // 播放器展开
-  commit('setFullScreen', true)
-  commit('setPlaylist', list)
-  commit('setCurrentIndex', index)
+  commit('setFullScreen', true);
+  commit('setCurrentIndex', index);
+  // 存放当前歌曲
+  commit('setCurrentSong', song);
 }
 
 export function randomPlay({ commit }, list) {
@@ -25,6 +35,25 @@ export function randomPlay({ commit }, list) {
   commit('setPlaylist', shuffle(list))
   commit('setCurrentIndex', 0)
 }
+
+// 改变歌曲播放模式, 同时重定位歌曲的Index
+export function changeMode({ commit, state, getters }, mode) {
+  let currentId = getters.currentSong?.id;
+  let list = []
+  if (mode == PLAY_MODE.random) {
+    list = state.randomList;
+    commit('setRandomList')
+  }
+  else
+    list = state.sequenceList;
+  commit('changeMode', mode);
+  let index = list.findIndex((song) => {
+      return song.id === currentId
+  })
+  
+  commit('setCurrentIndex', index)
+}
+
 
 // export function changeMode({ commit, state, getters }, mode) {
 //   const currentId = getters.currentSong.id
@@ -67,12 +96,12 @@ export function randomPlay({ commit }, list) {
 //   }
 // }
 
-// export function clearSongList({ commit }) {
-//   commit('setSequenceList', [])
-//   commit('setPlaylist', [])
-//   commit('setCurrentIndex', 0)
-//   commit('setPlayingState', false)
-// }
+export function clearSongList({ commit }) {
+  commit('setSequenceList', [])
+  commit('setList', [])
+  commit('setCurrentIndex', 0)
+  commit('setPlayingState', false)
+}
 
 // export function addSong({ commit, state }, song) {
 //   const playlist = state.playlist.slice()

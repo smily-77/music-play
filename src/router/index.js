@@ -66,7 +66,7 @@ const routes = [
   {
     path: "/artist/detail/:id",
     component: SingerDetail
-  }
+  },
 ];
 
 const routeHistory = createWebHashHistory();

@@ -4,11 +4,7 @@
       <i class="icon-back"></i>
     </div>
     <h1 class="title">{{ title }}</h1>
-    <div
-      class="bg-image"
-      :style="bgImageStyle"
-      ref="bgImage"
-    >
+    <div class="bg-image" :style="bgImageStyle" ref="bgImage">
       <div class="play-btn-wrapper">
         <div class="play-btn" @click="random">
           <i class="icon-play"></i>
@@ -17,8 +13,7 @@
       </div>
       <!-- <div class="filter"></div> -->
     </div>
-
-    <div class="music-content" >
+    <div class="music-content">
       <van-list
         v-model:loading="loading"
         :finished="finished"
@@ -49,6 +44,8 @@
 <script>
 import { inject, computed } from "vue";
 import router from "@/router/index.js";
+import { processSongWords } from "@/assets/js/util.js";
+
 // import { mapActions } from "vuex";
 import { useStore } from "vuex";
 export default {
@@ -63,7 +60,7 @@ export default {
 
     // 设置背景图片
     const bgImageStyle = computed(() => {
-      return {  
+      return {
         backgroundImage: `url(${pic.value})`,
       };
     });
@@ -74,24 +71,33 @@ export default {
 
     // 点击歌曲
     const selectItem = async (song, index) => {
-      store.dispatch("selectPlay", {
-        list: song,
-        index,
-      });
-      console.log(song.al.id, "song");
-
+      console.log(song, '????');
       let params = {
         id: song.id,
       };
-      const res = await global.api.getSongUrl(params);
-      console.log(res, "urllllll");
-      console.log(res.data[0].url, "23456");
+      let res = await global.api.getSongUrl(params);
+      let songWords = await global.api.getSongWords(params);
+      let { songWordMap, duration } = processSongWords(songWords);
+      store.dispatch("addSongAttr", {
+        index,
+        url: res.data[0].url,
+        words: songWordMap,
+        duration: duration,
+        lyric: songWords?.lrc?.lyric ? songWords?.lrc?.lyric : '[00:00:00]该歌曲暂无歌词\n'
+      })
+      // let newSong = {...song, url: res.data[0].url}
+      // song.url = res.data[0].url;
+      console.log(1, index, song, store);
+      store.dispatch("selectPlay", {
+        song,
+        index,
+      });
     };
     // 随机播放
     const random = () => {
-      store.dispatch("randomPlay", {
-        list: songs.value,
-      });
+      // store.dispatch("randomPlay", {
+      //   list: songs.value,
+      // });
     };
 
     // 返回上一页
@@ -99,9 +105,8 @@ export default {
       router.back();
     };
 
-
     return {
-   
+      store,
       title,
       pic,
       songs,
@@ -112,8 +117,6 @@ export default {
       getDesc,
       selectItem,
       random,
-     
-     
     };
   },
 };
@@ -149,7 +152,7 @@ export default {
     font-size: $font-size-large;
     color: $color-text-4;
   }
-  
+
   .bg-image {
     position: relative;
     width: 100%;
