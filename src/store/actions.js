@@ -17,7 +17,7 @@ export function saveAllMusics({ commit }, { songs }) {
 }
 
 // 选择列表中的播放
-export function selectPlay({ commit, getters }, { song, index }) {
+export function selectPlay({ commit, }, { song, index }) {
   // 存放当前歌曲
   commit("setCurrentSong", song);
   commit("setCurrentIndex", index);
