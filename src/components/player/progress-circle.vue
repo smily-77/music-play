@@ -59,15 +59,16 @@
   .progress-circle {
     position: relative;
     circle {
-      stroke-width: 8px;
+      stroke-width: 10px;
       transform-origin: center;
       &.progress-background {
-        transform: scale(0.9);
-        stroke: $color-theme-d;
+        transform: scale(1);
+        stroke:$color-background-2;
       }
       &.progress-bar {
         transform: scale(0.9) rotate(-90deg);
-        stroke:$color-theme-t;
+        stroke:blue;
+
       }
     }
   }

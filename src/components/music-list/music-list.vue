@@ -26,13 +26,17 @@
             :key="item.id"
             @click="selectItem(item, index)"
           >
-            <img class="icon" width="60" height="60" v-lazy="item.al.picUrl" />
+            <div class="rank" v-if="rank">
+              <span :class="getRankCls(index)">{{ getRankText(index) }}</span>
+            </div>
 
-            <div class="text">
-              <h2 class="name">
+            <img class="icon3" width="60" height="60" v-lazy="item.al.picUrl" />
+
+            <div class="text1">
+              <h2 class="name1">
                 {{ item.name }}
               </h2>
-              <p class="desc">{{ getDesc(item) }}</p>
+              <p class="desc1">{{ getDesc(item) }}</p>
             </div>
           </li>
         </ul>
@@ -57,6 +61,7 @@ export default {
     const songs = inject("songs");
     const loading = inject("loading");
     const finished = inject("finished");
+    const rank = inject("rank");
 
     // 设置背景图片
     const bgImageStyle = computed(() => {
@@ -69,40 +74,64 @@ export default {
       return `${song.al.name}·${song.alia}`;
     };
 
+    // 添加歌曲属性
+    const addAttr = (song, {url, duration, lyric}) => {
+      let newSong = {...song, url, duration, lyric}
+      return newSong
+    }
+
     // 点击歌曲
     const selectItem = async (song, index) => {
-      console.log(song, '????');
       let params = {
         id: song.id,
       };
       let res = await global.api.getSongUrl(params);
       let songWords = await global.api.getSongWords(params);
       let { songWordMap, duration } = processSongWords(songWords);
+      let lyric = songWords?.lrc?.lyric
+          ? songWords?.lrc?.lyric
+          : "[00:00:00]该歌曲暂无歌词\n";
+      let url = res.data[0].url;
       store.dispatch("addSongAttr", {
         index,
-        url: res.data[0].url,
+        url,
         words: songWordMap,
-        duration: duration,
-        lyric: songWords?.lrc?.lyric ? songWords?.lrc?.lyric : '[00:00:00]该歌曲暂无歌词\n'
-      })
+        duration,
+        lyric
+      });
       // let newSong = {...song, url: res.data[0].url}
       // song.url = res.data[0].url;
-      console.log(1, index, song, store);
+      addAttr(song, {url, duration, lyric})
+      console.log(1, index, song);
       store.dispatch("selectPlay", {
         song,
         index,
       });
     };
+
     // 随机播放
     const random = () => {
-      // store.dispatch("randomPlay", {
-      //   list: songs.value,
-      // });
+      store.dispatch("randomMusic");
+      let randomFirst = store.getters.firstMusic;
+      selectItem(randomFirst, 0);
     };
 
     // 返回上一页
     const goBack = () => {
       router.back();
+    };
+
+    const getRankCls = (index) => {
+      if (index <= 2) {
+        return `icon icon${index}`;
+      } else {
+        return "text";
+      }
+    };
+    const getRankText = (index) => {
+      if (index > 2) {
+        return index + 1;
+      }
     };
 
     return {
@@ -112,11 +141,14 @@ export default {
       songs,
       loading,
       finished,
+      rank,
       bgImageStyle,
       goBack,
       getDesc,
       selectItem,
       random,
+      getRankCls,
+      getRankText,
     };
   },
 };
@@ -210,13 +242,39 @@ export default {
       align-items: center;
       padding: 10px 20px 0px 20px;
       background: $color-theme;
-      .icon {
+      .rank {
+        flex: 0 0 15px;
+        width: 15px;
+        margin-right: 5px;
+        text-align: center;
+        .icon {
+          display: inline-block;
+          width: 25px;
+          height: 24px;
+          background-size: 25px 24px;
+          &.icon0 {
+            @include bg-image("first");
+          }
+          &.icon1 {
+            @include bg-image("second");
+          }
+          &.icon2 {
+            @include bg-image("third");
+          }
+        }
+        .text {
+          color:rgb(239,41,118);
+          font-size: $font-size-large;
+        }
+      }
+      .icon3 {
         flex: 0 0 60px;
         border-radius: 5px;
         width: 60px;
         padding-right: 20px;
+        padding-left: 20px;
       }
-      .text {
+      .text1 {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -224,13 +282,13 @@ export default {
         line-height: 20px;
         font-size: $font-size-medium;
         overflow: hidden;
-        .name {
+        .name1 {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           color: $color-text-3;
         }
-        .desc {
+        .desc1 {
           @include no-wrap();
           margin-top: 4px;
           color: #c8c9cc;

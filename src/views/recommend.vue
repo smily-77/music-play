@@ -79,7 +79,7 @@ export default {
 
     // 点击歌单跳转歌单详情页面
     const selectItem = (album) => {
-      console.log(album.id, "dianji1");
+     
       selectedAlbum.value = album;
       cacheAlbum(album);
       router.push({

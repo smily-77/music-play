@@ -1,14 +1,14 @@
 import { useStore } from 'vuex'
-import { PLAY_KEY } from '@/assets/js/constant'
+import { PLAY_KEYS } from '@/assets/js/constant'
 import { save } from '@/assets/js/array-store'
 
 export default function usePlayHistory() {
   const store = useStore()
 
-  const maxLen = 200
+  const maxLen = 100
 
   function savePlay(song) {
-    const songs = save(song, PLAY_KEY, (item) => {
+    const songs = save(song, PLAY_KEYS, (item) => {
       return item.id === song.id
     }, maxLen)
 

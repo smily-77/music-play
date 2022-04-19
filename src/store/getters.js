@@ -29,3 +29,39 @@ export const actualPlayList = (state) => {
     return state.sequenceList;
 }
 
+// 获取待添加的新歌对应的index
+export const getNewSongIndex = (state) => (song) => {
+  let songList = [];
+  let isNew = false;
+  if (state.playMode == PLAY_MODE.random)
+    songList = state.randomList;
+  else
+    songList = state.sequenceList;
+  let currentIndex = state.currentIndex;
+  const playIndex = findIndex(songList, song);
+  if (playIndex > -1) {
+    currentIndex = playIndex;
+  } else {
+    currentIndex = songList.length;
+    isNew = true;
+  }
+  return {
+    index: currentIndex,
+    isNew
+  }
+}
+
+export const firstMusic = (state) => {
+  if (state.randomList.length == 0 && state.sequenceList.length == 0)
+    return null;
+  else if (state.playMode == PLAY_MODE.random)
+    return state.randomList[0];
+  else
+    return state.sequenceList[0];
+}
+
+function findIndex(list, song) {
+  return list.findIndex((item) => {
+    return item.id === song.id
+  })
+}

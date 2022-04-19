@@ -1,59 +1,53 @@
-import { PLAY_MODE } from '@/assets/js/constant'
-import { shuffle } from '@/assets/js/util'
-
+import { PLAY_MODE } from "@/assets/js/constant";
+// import { shuffle } from "@/assets/js/util";
 
 // 向song数据中添加url
-export function addSongAttr({ commit }, { index, url, words, duration, lyric }) {
-  commit('addSongUrl', {index, url})
-  commit('addSongWords', {index, words, lyric})
-  commit('addSongDuration', {index, duration})
+export function addSongAttr(
+  { commit },
+  { index, url, words, duration, lyric }
+) {
+  commit("addSongUrl", { index, url });
+  commit("addSongWords", { index, words, lyric });
+  commit("addSongDuration", { index, duration });
 }
 
 // 存储歌单所有音乐列表
 export function saveAllMusics({ commit }, { songs }) {
-  commit('setSequenceList', songs);
+  commit("setSequenceList", songs);
 }
 
 // 选择列表中的播放
-export function selectPlay({ commit }, { song, index } ) {
-  console.log('actions', commit, song, index);
-  // 播放歌曲
-  commit('setPlayingState', true);
-  // 播放器展开
-  commit('setFullScreen', true);
-  commit('setCurrentIndex', index);
+export function selectPlay({ commit, getters }, { song, index }) {
   // 存放当前歌曲
-  commit('setCurrentSong', song);
+  commit("setCurrentSong", song);
+  commit("setCurrentIndex", index);
+  // 播放器展开
+  commit("setFullScreen", true);
+  // 播放歌曲
+  commit("setPlayingState", true);
 }
 
-export function randomPlay({ commit }, list) {
-  console.log('actions', list);
-  commit('setPlayMode', PLAY_MODE.random)
-  commit('setSequenceList', list)
-  commit('setPlayingState', true)
-  commit('setFullScreen', true)
-  commit('setPlaylist', shuffle(list))
-  commit('setCurrentIndex', 0)
+// 打乱歌曲列表, 设置随机模式
+export function randomMusic({ commit }) {
+  commit("setRandomList");
+  commit("setPlayMode", PLAY_MODE.random);
 }
 
 // 改变歌曲播放模式, 同时重定位歌曲的Index
 export function changeMode({ commit, state, getters }, mode) {
   let currentId = getters.currentSong?.id;
-  let list = []
+  let list = [];
   if (mode == PLAY_MODE.random) {
     list = state.randomList;
-    commit('setRandomList')
-  }
-  else
-    list = state.sequenceList;
-  commit('changeMode', mode);
+    commit("setRandomList");
+  } else list = state.sequenceList;
+  commit("changeMode", mode);
   let index = list.findIndex((song) => {
-      return song.id === currentId
-  })
-  
-  commit('setCurrentIndex', index)
-}
+    return song.id === currentId;
+  });
 
+  commit("setCurrentIndex", index);
+}
 
 // export function changeMode({ commit, state, getters }, mode) {
 //   const currentId = getters.currentSong.id
@@ -97,39 +91,25 @@ export function changeMode({ commit, state, getters }, mode) {
 // }
 
 export function clearSongList({ commit }) {
-  commit('setSequenceList', [])
-  commit('setList', [])
-  commit('setCurrentIndex', 0)
-  commit('setPlayingState', false)
+  commit("setSequenceList", []);
+  commit("setRandomList", []);
+  commit("setCurrentIndex", 0);
+  commit("setPlayingState", false);
 }
 
-// export function addSong({ commit, state }, song) {
-//   const playlist = state.playlist.slice()
-//   const sequenceList = state.sequenceList.slice()
-//   let currentIndex = state.currentIndex
-//   const playIndex = findIndex(playlist, song)
+export function addSong({ commit, state }, {song, isNew}) {
+  let playlist = state.randomList.slice()
+  let sequenceList = state.sequenceList.slice()
 
-//   if (playIndex > -1) {
-//     currentIndex = playIndex
-//   } else {
-//     playlist.push(song)
-//     currentIndex = playlist.length - 1
-//   }
+  if (isNew) {
+    playlist.push(song);
+    sequenceList.push(song);
+    commit("setSequenceList", sequenceList);
+    commit("setRandomList", playlist);
+  }
+ 
+}
 
-//   const sequenceIndex = findIndex(sequenceList, song)
-//   if (sequenceIndex === -1) {
-//     sequenceList.push(song)
-//   }
-
-//   commit('setSequenceList', sequenceList)
-//   commit('setPlaylist', playlist)
-//   commit('setCurrentIndex', currentIndex)
-//   commit('setPlayingState', true)
-//   commit('setFullScreen', true)
-// }
-
-// function findIndex(list, song) {
-//   return list.findIndex((item) => {
-//     return item.id === song.id
-//   })
-// }
+export function cpListToSeq({ commit }, { mode }) {
+  commit("cpListToSeq", mode);
+}

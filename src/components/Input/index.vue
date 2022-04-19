@@ -51,7 +51,6 @@ export default {
 
         onMounted(() => {
             updateData();
-            console.log(props)
         })
 
         const state = reactive({

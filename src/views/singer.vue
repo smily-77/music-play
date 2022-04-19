@@ -45,7 +45,7 @@ export default {
     
 
     const getSingerList = async () => {
-        console.log(store.getters.getSingers, 99)
+        
         if (store.getters.getSingers == null) {
             getNewSingerList();
         }
@@ -68,7 +68,7 @@ export default {
         tempSinger[name] = res[r].data?.artists;
         j++;
       }
-    //   console.log(singers.value, "1");
+
       // 加载状态结束
       loading.value = false;
       finished.value = true;
@@ -79,7 +79,7 @@ export default {
     const selectSinger = (singer) => {
       oneSinger.value = singer;
       cacheSinger(singer);
-      console.log(oneSinger.value, "111111");
+  
       router.push({
         path: `/artist/detail/${singer.id}`,
       });

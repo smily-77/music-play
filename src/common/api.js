@@ -70,6 +70,52 @@ export const getSongUrl = (params) => get("/song/url", params);
  * @returns
  */
 export const getSongWords = (params) => get("/lyric", params);
+
+/**
+ * 根据歌单id获取歌单歌曲
+ * @returns
+ */
+export const getAlbumSong = (params) => get("/playlist/track/all", params);
+
+/**
+ * 根据id获取歌单详情
+ * @returns
+ */
+export const getAlbumDetail = (params) => get("/playlist/detail", params);
+
+/**
+ * 获取排行榜
+ * @returns
+ */
+export const getToplist = (params) => get("/toplist", params);
+
+/**
+ * 获取榜单详情
+ * @param {*} params
+ * @returns
+ */
+export const getToplistDetail = (params) => get("/toplist/detail", params);
+
+/**
+ * 获取热门搜索
+ * @returns
+ */
+export const getHotSearch = (params) => get("/search/hot", params);
+/**
+ * 搜索歌曲/歌手·
+ * @returns
+ */
+export const getSearchSong = (params) => get("/search", params);
+
+/**
+ * 获取歌曲详情
+ * @returns 
+ */
+export const getSongDetail = (params) => get("/song/detail", params);
+
+
+
+
 /**
  * 退出登录
  *

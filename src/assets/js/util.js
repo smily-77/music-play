@@ -55,7 +55,6 @@ export const processSongWords = (songWords) => {
         duration = timeKey.split('.')[0];
     }
   }
-  console.log(lyricMap, 999999);
   return {
     songWordMap: lyricMap,
     duration

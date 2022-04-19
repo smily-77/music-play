@@ -7,12 +7,8 @@
         class="search-item"
         @click="selectItem(item)"
       >
-        <span class="text">{{item}}</span>
-        <span
-          v-if="showDelete"
-          class="icon"
-          @click.stop="deleteItem(item)"
-        >
+        <span class="text">{{ item }}</span>
+        <span v-if="showDelete" class="icon" @click.stop="deleteItem(item)">
           <i class="icon-delete"></i>
         </span>
       </li>
@@ -21,50 +17,54 @@
 </template>
 
 <script>
-  export default {
-    name: 'search-list',
-    props: {
-      searches: {
-        type: Array,
-        default() {
-          return []
-        }
+export default {
+  name: "search-list",
+  props: {
+    searches: {
+      type: Array,
+      default() {
+        return [];
       },
-      showDelete: {
-        type: Boolean,
-        default: true
-      }
     },
-    emits: ['select', 'delete'],
-    methods: {
-      selectItem(item) {
-        this.$emit('select', item)
-      },
-      deleteItem(item) {
-        this.$emit('delete', item)
-      }
-    }
-  }
+    showDelete: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  emits: ["select", "delete"],
+  methods: {
+    selectItem(item) {
+      this.$emit("select", item);
+    },
+    deleteItem(item) {
+      this.$emit("delete", item);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .search-list {
-    .search-item {
-      display: flex;
-      align-items: center;
-      height: 40px;
-      overflow: hidden;
-      .text {
-        flex: 1;
-        color: $color-text-l;
-      }
-      .icon {
-        @include extend-click();
-        .icon-delete {
-          font-size: $font-size-small;
-          color: $color-text-d;
-        }
+.search-list {
+  .search-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    overflow: hidden;
+    .text {
+      position: absolute;
+      flex: 1;
+      color: $color-background;
+    }
+    .icon {
+      position: absolute;
+      left:96%;
+      @include extend-click();
+      .icon-delete {
+        font-size: $font-size-small;
+        color: $color-background;
       }
     }
   }
+}
 </style>

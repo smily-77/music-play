@@ -88,13 +88,13 @@
             <div class="icon i-left">
               <i @click="changeMode" :class="modeIcon"></i>
             </div>
-            <div class="icon i-left">
+            <div class="icon i-left" :class="disableCls">
               <i @click="prev" class="icon-prev"></i>
             </div>
-            <div class="icon i-center">
+            <div class="icon i-center" :class="disableCls">
               <i @click="togglePlay" :class="playIcon"></i>
             </div>
-            <div class="icon i-right">
+            <div class="icon i-right" :class="disableCls">
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
@@ -133,8 +133,8 @@ import useFavorite from "./use-favorite";
 import useCd from "./use-cd";
 import useLyric from "./use-lyric";
 import useMiddleInteractive from "./use-middle-interactive";
-import useAnimation from './use-animation'
-// import usePlayHistory from './use-play-history'
+import useAnimation from "./use-animation";
+import usePlayHistory from "./use-play-history";
 import ProgressBar from "./progress-bar";
 import Scroll from "@/components/base/scroll/scroll";
 import MiniPlayer from "./mini-player";
@@ -192,8 +192,9 @@ export default {
       onMiddleTouchMove,
       onMiddleTouchEnd,
     } = useMiddleInteractive();
-    const { cdWrapperRef, enter, afterEnter, leave, afterLeave } = useAnimation()
-    // const { savePlay } = usePlayHistory()
+    const { cdWrapperRef, enter, afterEnter, leave, afterLeave } =
+      useAnimation();
+    const { savePlay } = usePlayHistory();
     // computed
     //设置播放和暂停按钮
     const playIcon = computed(() => {
@@ -218,9 +219,9 @@ export default {
       return currentTime.value / durationTime;
     });
 
-    // const disableCls = computed(() => {
-    //   return songReady.value ? '' : 'disable'
-    // })
+    const disableCls = computed(() => {
+      return songReady.value ? "" : "disable";
+    });
 
     onMounted(() => {
       const audioEl = audioRef.value;
@@ -239,7 +240,6 @@ export default {
       songReady.value = false;
       const audioEl = audioRef.value;
       if (audioEl) {
-        console.log(audioRef, 98765);
         audioEl.src = newSong.url;
         audioEl.play();
       }
@@ -284,7 +284,6 @@ export default {
         return;
       }
       store.commit("setPlayingState", !playing.value);
-      console.log(playing.value, "playing.value1111");
     }
 
     // 暂停音乐
@@ -387,12 +386,15 @@ export default {
     }
 
     function ready() {
+      console.log("resdy1");
       if (songReady.value) {
+        console.log("resdy2");
         return;
       }
+      console.log("resdy3");
       songReady.value = true;
       playLyric();
-      // savePlay(currentSong.value);
+      savePlay(currentSong.value);
     }
 
     function error() {
@@ -448,7 +450,7 @@ export default {
       // playlist,
       playIcon,
       showPlayView,
-      // disableCls,
+      disableCls,
       progress,
       goBack,
       togglePlay,
@@ -492,7 +494,7 @@ export default {
       enter,
       afterEnter,
       leave,
-      afterLeave
+      afterLeave,
     };
   },
 };

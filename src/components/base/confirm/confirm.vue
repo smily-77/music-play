@@ -97,13 +97,13 @@
       .confirm-content {
         width: 270px;
         border-radius: 13px;
-        background: $color-highlight-background;
+        background: $color-background-3;
         .text {
           padding: 19px 15px;
           line-height: 22px;
           text-align: center;
           font-size: $font-size-large;
-          color: $color-text-l;
+          color: $color-text-5;
         }
         .operate {
           display: flex;
@@ -114,11 +114,11 @@
             flex: 1;
             line-height: 22px;
             padding: 10px 0;
-            border-top: 1px solid $color-background-d;
-            color: $color-text-l;
+            border-top: 1px solid $color-background;
+            color:$color-text-5;
             &.left {
-              border-right: 1px solid $color-background-d;
-              color: $color-text;
+              border-right: 1px solid $color-background;
+              color: rgb(230,30,15);
             }
           }
         }

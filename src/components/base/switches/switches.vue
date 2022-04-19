@@ -51,7 +51,8 @@
     align-items: center;
     width: 240px;
     margin: 0 auto;
-    border: 1px solid $color-highlight-background;
+    border: 1px solid $color-background-3;
+    // background: $color-background-2;
     border-radius: 5px;
     .switch-item {
       position: relative;
@@ -61,9 +62,9 @@
       line-height: 30px;
       text-align: center;
       font-size: $font-size-medium;
-      color: $color-text-d;
+      color: $color-background-4;
       &.active {
-        color: $color-text
+        color: $color-background-4
       }
     }
     .active-bar {
@@ -74,7 +75,7 @@
       height: 30px;
       transition: transform 0.3s;
       border-radius: 5px;
-      background: $color-highlight-background;
+      background: $color-background-3;
     }
   }
 </style>

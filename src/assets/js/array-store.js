@@ -23,7 +23,7 @@ function deleteFromArray(arr, compare) {
   }
 }
 
-// 保存进收藏列表
+// 保存进列表
 export function save(item, key, compare, maxLen) {
   const items = storage.get(key, [])
   inertArray(items, item, compare, maxLen)

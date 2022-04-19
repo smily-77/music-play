@@ -1,4 +1,4 @@
-import { PLAY_MODE, FAVORITE_KEY } from "@/assets/js/constant";
+import { PLAY_MODE, FAVORITE_KEY, SEARCH_KEY,PLAY_KEYS } from "@/assets/js/constant";
 import { load } from "@/assets/js/array-store";
 
 const state = {
@@ -18,8 +18,9 @@ const state = {
   fullScreen: false,
   // 收藏歌单列表
   favoriteList: load(FAVORITE_KEY),
-  // searchHistory: load(SEARCH_KEY),
-  playHistory: [],
+  // 搜索历史
+  searchHistory: load(SEARCH_KEY),
+  playHistory:load(PLAY_KEYS),
   // 当前播放的歌曲
   currentSong: {},
   // 上一首播放歌曲的index

@@ -18,7 +18,7 @@
         <div class="slider-group">
           <div class="slider-page" v-for="song in playlist" :key="song.id">
             <h2 class="name">{{ song.name }}</h2>
-            <p class="desc">{{ song.ar[0]?.name }}</p>
+            <!-- <p class="desc" v-if="song?.ar?.length">{{ song.ar[0]?.name }}</p> -->
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@ export default {
   z-index: 180;
   width: 100%;
   height: 60px;
-  background: #184068;
+  background:$color-background-3;
   .cd-wrapper {
     flex: 0 0 40px;
     width: 40px;
@@ -160,13 +160,13 @@ export default {
           margin-bottom: 2px;
           @include no-wrap();
           font-size: $font-size-medium;
-          color: $color-text;
+          color: $color-text-3;
         }
         .desc {
           top:18px;
           @include no-wrap();
           font-size: $font-size-small;
-          color: $color-text;
+          color:$color-text-2;
         }
       }
     }
@@ -179,13 +179,13 @@ export default {
       position: relative;
       top: -2px;
       font-size: 28px;
-      color: $color-theme-d;
+      color: $color-background;
     }
     .icon-mini {
       position: absolute;
       left: 0;
       top: 0;
-      color: $color-theme-d;
+      color:$color-background;
       font-size: 32px;
     }
   }

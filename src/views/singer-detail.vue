@@ -16,7 +16,7 @@ export default {
     MusicList,
   },
   setup() {
-    //   console.log(router.currentRoute.value.params.id,"id")
+
     const store = useStore();
     const songs = ref();
     const pic = ref();
@@ -28,6 +28,7 @@ export default {
     provide("songs", songs);
     provide("loading", loading);
     provide("finished", finished);
+    provide("rank", false);
 
     // 获取歌手详情图片和姓名
     const getDetail = async () => {
@@ -48,7 +49,7 @@ export default {
       const res = await global.api.getHotSongs(params);
       if (res.code === 200) {
         songs.value = res.songs;
-        console.log(res);
+
       }
       // 加载状态结束
       loading.value = false;

@@ -1,4 +1,5 @@
 import { shuffle } from '@/assets/js/util'
+import { PLAY_MODE } from '@/assets/js/constant';
 const mutations = {
   // 修改歌手列表
   saveSingers(state, data) {
@@ -17,9 +18,9 @@ const mutations = {
   setPlaylist(state, list) {
     state.playlist = list;
   },
-  setList(state, list) {
-    state.randomList = list;
-  },
+  // setRandomList(state, list) {
+  //   state.randomList = list;
+  // },
 
   // 设置播放模式
   setPlayMode(state, mode) {
@@ -45,11 +46,16 @@ const mutations = {
       return item;
     });
   },
+  // 设置搜索历史
   setSearchHistory(state, searches) {
     state.searchHistory = searches;
   },
+
   setPlayHistory(state, songs) {
     state.playHistory = songs;
+    console.log(songs,"ssssss")
+    // state.playHistory=[]
+
   },
 
   // 存放当前歌曲
@@ -59,17 +65,32 @@ const mutations = {
 
   // 追加url数据
   addSongUrl(state, {index, url}) {
-    state.sequenceList[index].url = url;
+    if (state.playMode == PLAY_MODE.random)
+        state.randomList[index].url = url;
+    else {
+        state.sequenceList[index].url = url;
+    } 
   },
 
   // 追加歌曲歌词
   addSongWords(state, {index, words, lyric}) {
-    state.sequenceList[index].words = words;
-    state.sequenceList[index].lyric = lyric;
+    if (state.playMode == PLAY_MODE.random) {
+      state.randomList[index].words = words;
+      state.randomList[index].lyric = lyric;
+    }
+    else {
+      state.sequenceList[index].words = words;
+      state.sequenceList[index].lyric = lyric;
+    }
   },
 
   addSongDuration(state, {index, duration}) {
-    state.sequenceList[index].duration = duration;
+    if (state.playMode == PLAY_MODE.random) {
+      state.randomList[index].duration = duration;
+    }
+    else {
+      state.sequenceList[index].duration = duration;
+    }
   },
 
   // 改变歌曲播放次序
@@ -89,10 +110,18 @@ const mutations = {
 
   // 初始化随机歌曲数组
   setRandomList(state) {
-    console.log('old', state.sequenceList);
+   
     state.randomList = shuffle(state.sequenceList);
-    console.log('new', state.randomList);
+   
   },
+
+  // 将最爱歌曲cp到顺序列表
+  cpListToSeq(state, mode) {
+    if (mode == 0)
+      state.sequenceList = state.favoriteList;
+    else
+      state.sequenceList = state.playHistory
+  }
   
 
 };

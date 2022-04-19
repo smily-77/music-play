@@ -75,7 +75,7 @@
   import SongList from '@/components/base/song-list/song-list'
   import SearchList from '@/components/base/search-list/search-list'
   import Message from '@/components/base/message/message'
-  import { ref, computed, nextTick, watch } from 'vue'
+  import { ref, , nextTick, watch } from 'vue'
   import { useStore } from 'vuex'
   import useSearchHistory from '@/components/search/use-search-history'
 

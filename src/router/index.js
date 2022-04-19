@@ -10,7 +10,7 @@ const User = () => import("@/views/user");
 const Welcome = () => import("@/views/welcome");
 const Album = () => import("@/views/album");
 const SingerDetail = () => import('@/views/singer-detail')
-
+const TopDetail = () => import('@/views/top-detail')
 
 const routes = [
   {
@@ -66,6 +66,11 @@ const routes = [
   {
     path: "/artist/detail/:id",
     component: SingerDetail
+  },
+  // 榜单详情页面
+  {
+    path: "/top-list/:id",
+    component: TopDetail
   },
 ];
 
