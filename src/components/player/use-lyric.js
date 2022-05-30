@@ -29,11 +29,6 @@ export default function useLyric({ songReady, currentTime }) {
     pureMusicLyric.value = "";
     playingLyric.value = "";
 
-    // const lyric = await getLyric(newSong)
-    // store.commit('addSongLyric', {
-    //   song: newSong,
-    //   lyric
-    // })
     const lyric = currentSong.value.lyric;
     if (currentSong.value.lyric !== lyric) {
       return;

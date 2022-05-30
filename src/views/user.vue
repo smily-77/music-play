@@ -50,8 +50,6 @@ export default {
     };
   },
   created() {
-    // this.$store.dispatch("cpFavToSeq");
-    // console.log(this.playHistory,"playHistory")
   },
   computed: {
     currentList() {
@@ -76,17 +74,9 @@ export default {
         id: song.id,
       };
       let res = await global.api.getSongUrl(params);
-
       let songWords = await global.api.getSongWords(params);
       let { songWordMap, duration } = processSongWords(songWords);
       this.$store.dispatch("addSong", { song, isNew });
-      // console.log(
-      //   index,
-      //   999,
-      //   songWords,
-      //   duration,
-      //   this.$store.state.sequenceList
-      // );
       let lyric = songWords?.lrc?.lyric
           ? songWords?.lrc?.lyric
           : "[00:00:00]该歌曲暂无歌词\n";
@@ -107,8 +97,6 @@ export default {
     },
 
     async selectSong({ song }) {
-
-      // saveSearch(query.value);
       let playList = this.$store.getters.actualPlayList;
       let exist = playList.findIndex((item) => {
         return song.id === item.id;

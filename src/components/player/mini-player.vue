@@ -62,7 +62,6 @@ export default {
   },
   setup() {
     const playlistRef = ref(null)
-
     const store = useStore();
     const fullScreen = computed(() => store.state.fullScreen);
     const currentSong = computed(() => store.getters.currentSong);
@@ -159,7 +158,7 @@ export default {
         .name {
           margin-bottom: 2px;
           @include no-wrap();
-          font-size: $font-size-medium;
+          font-size: $font-size-medium-x;
           color: $color-text-3;
         }
         .desc {

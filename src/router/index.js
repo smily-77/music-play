@@ -88,7 +88,7 @@ router.beforeEach((to, form, next) => {
   //3.next 是一个函数    next（）表示放行    next（'/login'）表示强制跳转
 
   //如果用户要访问登录路径，直接放行
-  if (to.path === "/login") return next();
+  if (to.path === "/login" || to.path === "/sign") return next();
   //从sessionSTory中获取保存的token值
 
   var tokenStr = window.sessionStorage.getItem("token");

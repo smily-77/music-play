@@ -356,9 +356,6 @@ export default {
     // 下一首歌
     async function next() {
       let list = [];
-      // if (!songReady.value || !list.length) {
-      //   return
-      // }
       if (store.state.playMode == PLAY_MODE.random) list = randomList.value;
       else list = sequenceList.value;
 

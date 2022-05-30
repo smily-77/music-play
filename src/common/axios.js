@@ -8,7 +8,6 @@ const _axios = axios.create({
 
 // 根据环境，配置BaseUrl
 
-console.log('运行环境', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'development')
     _axios.defaults.baseURL = '/api';
 else if (process.env.NODE_ENV === 'production')
